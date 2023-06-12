@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "843619232795",
+    "project_id": "hl-bigger",
+    "storage_bucket": "hl-bigger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:843619232795:android:d0501c57fe90f7d0badcbe",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.HanifeLacin__Bigger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "843619232795-mbq80av122ro3nrtpn5594ptdabdosft.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwuJu640hMdYkaXOoyy-McQY03hIrVdLU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "843619232795-mbq80av122ro3nrtpn5594ptdabdosft.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

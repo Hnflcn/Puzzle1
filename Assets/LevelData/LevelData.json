@@ -1,0 +1,33 @@
+{
+	"Level1":{
+		"LevelName" : "Level1",
+		"LevelDifficulty" : "Medium",
+		"BoardSize": "4-4",
+		"PieceCount": 5
+	},
+	"Level2":{
+		"LevelName" : "Level2",
+		"LevelDifficulty" : "Easy",
+		"BoardSize": "4-4",
+		"PieceCount": 3
+	},
+	"Level3":{
+		"LevelName" : "Level3",
+		"LevelDifficulty" : "Medium",
+		"BoardSize": "4-4",
+		"PieceCount": 6
+	},
+	"Level4":{
+		"LevelName" : "Level4",
+		"LevelDifficulty" : "Medium",
+		"BoardSize": "4-4",
+		"PieceCount": 6
+	},
+	"Level5":{
+		"LevelName" : "Level5",
+		"LevelDifficulty" : "Medium",
+		"BoardSize": "4-4",
+		"PieceCount": 5
+	}
+	
+}
