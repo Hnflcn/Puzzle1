@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Base;
 using Enums;
 using Lean.Touch;
 using Managers;
@@ -18,11 +19,6 @@ public class Block : Move
 
     private bool canMove;
     private bool isCondition;
-
-    private float upBorder;
-    private float downBorder;
-    private float rightBorder;
-    private float leftBorder;
 
     private Vector3 firstPosition;
     
@@ -42,11 +38,6 @@ public class Block : Move
         {
             piece.meshRenderer.enabled = true;
         }
-        
-        downBorder = firstPosition.y - .5f;
-        upBorder = firstPosition.y + .5f;
-        rightBorder = firstPosition.x + .5f;
-        leftBorder = firstPosition.x - .5f;
     }
 
     private void OnEnable()
@@ -75,30 +66,28 @@ public class Block : Move
     protected virtual void OnFingerUp(LeanFinger finger)
     {
         canMove = false;
-        if (blockSituation == BlockSituation.Dragable)
-        {
-            blockSituation = BlockSituation.NotDragable;
-            var pos = transform.position;
+        if (blockSituation != BlockSituation.Dragable) return;
 
-            if (pos.y > downBorder && pos.y < upBorder && pos.x < rightBorder && pos.x > leftBorder)
-            {
-                transform.position = firstPosition;
-                lastSituation = LastCondition.InTrueCondition;
-                EventManager.ControlFinish?.Invoke(this);
-            }
-            else
-            {
-                transform.position = new Vector3(pos.x, pos.y, 0);
-            }
+        blockSituation = BlockSituation.NotDragable;
+        var pos = transform.position;
+        var distance = Vector2.Distance(firstPosition, pos);
+
+        transform.position = distance < 0.5f ? firstPosition : new Vector3(pos.x, pos.y, 0);
+
+        if (distance < 0.5f)
+        {
+            lastSituation = LastCondition.InTrueCondition;
+            EventManager.ControlFinish?.Invoke(this);
         }
-        
     }
 
     protected virtual void OnFingerUpdate(LeanFinger finger)
     {
-        if (canMove  && blockSituation == BlockSituation.Dragable)
+        switch (canMove)
         {
-            Moving();
+            case true when blockSituation == BlockSituation.Dragable:
+                Moving();
+                break;
         }
     }
 

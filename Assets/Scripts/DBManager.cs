@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class DBManager : MonoBehaviour
 {
     private DatabaseReference levelDB;
-    private string FirebaseDBURL = "https://hl-bigger-default-rtdb.firebaseio.com/";
+    private readonly string firebaseDburl = "https://hl-bigger-default-rtdb.firebaseio.com/";
     public string lvlName;
     private void Start()
     {
@@ -35,7 +35,7 @@ public class DBManager : MonoBehaviour
 
     public void GetLevelInformation()
     {
-        levelDB = FirebaseDatabase.GetInstance(FirebaseDBURL).GetReference(lvlName);
+        levelDB = FirebaseDatabase.GetInstance(firebaseDburl).GetReference(lvlName);
         levelDB.GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
