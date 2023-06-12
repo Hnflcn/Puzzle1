@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using Firebase;
 using Firebase.Database;
@@ -10,49 +11,36 @@ public class DBManager : MonoBehaviour
     private DatabaseReference levelDB;
     private readonly string firebaseDburl = "https://hl-bigger-default-rtdb.firebaseio.com/";
     public string lvlName;
-    private void Start()
+    private async void Start()
     {
-        Initialization();
+        await Initialization();
     }
-
-    private void Initialization()
+    private async Task Initialization()
     {
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
-        {
-            var dependencyStatus = task.Result;
-            if (dependencyStatus == DependencyStatus.Available)
-            {
-                Debug.Log("Firebase initialized successfully");
-            }
-            else
-            {
-                Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
-            }
-        });
+        var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
+        Debug.Log(dependencyStatus == DependencyStatus.Available ? "Firebase initialized successfully" : "Could not resolve all Firebase dependencies: " + dependencyStatus);
     }
 
     private string levelName;
 
-    public void GetLevelInformation()
+    public async void GetLevelInformation()
     {
-        levelDB = FirebaseDatabase.GetInstance(firebaseDburl).GetReference(lvlName);
-        levelDB.GetValueAsync().ContinueWith(task =>
+        try
         {
-            if (task.IsFaulted)
+            levelDB = FirebaseDatabase.GetInstance(firebaseDburl).GetReference(lvlName);
+            var snapshot = await levelDB.GetValueAsync();
+
+            foreach (var level in snapshot.Children)
             {
-                Debug.LogError("Error getting level data");
+                levelName = level.Key;
+                // SceneManager.LoadScene(levelName);
+                Debug.Log(level.Key + " : " + level.Value);
             }
-            else if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-                foreach (var level in snapshot.Children)
-                {
-                    levelName = level.Key;
-                 //   SceneManager.LoadScene(levelName);
-                    Debug.Log(level.Key + " : " + level.Value);
-                }
-            }
-        });
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Error getting level data: " + e.Message);
+        }
     }
 
 }

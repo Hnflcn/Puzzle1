@@ -8,7 +8,7 @@ using Lean.Touch;
 using Managers;
 using UnityEngine;
 
-public class Block : Move
+public sealed class Block : Move
 {
     #region Variables
     
@@ -58,12 +58,12 @@ public class Block : Move
     
     #region LeanTouchFunctions
 
-    protected virtual void OnFingerDown(LeanFinger finger)
+    private void OnFingerDown(LeanFinger finger)
     {
         canMove = true;
     }
 
-    protected virtual void OnFingerUp(LeanFinger finger)
+    private void OnFingerUp(LeanFinger finger)
     {
         canMove = false;
         if (blockSituation != BlockSituation.Dragable) return;
@@ -74,14 +74,12 @@ public class Block : Move
 
         transform.position = distance < 0.5f ? firstPosition : new Vector3(pos.x, pos.y, 0);
 
-        if (distance < 0.5f)
-        {
-            lastSituation = LastCondition.InTrueCondition;
-            EventManager.ControlFinish?.Invoke(this);
-        }
+        if (!(distance < 0.5f)) return;
+        lastSituation = LastCondition.InTrueCondition;
+        EventManager.ControlFinish?.Invoke(this);
     }
 
-    protected virtual void OnFingerUpdate(LeanFinger finger)
+    private void OnFingerUpdate(LeanFinger finger)
     {
         switch (canMove)
         {

@@ -40,23 +40,14 @@ namespace Managers
 
         private void OnFingerUpdate(LeanFinger finger)
         {
-            if (canMove)
-            {
-                var ray = Camera.main.ScreenPointToRay(Input.mousePosition); 
-                RaycastHit hit;
+            if (!canMove) return;
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-                if (Physics.Raycast(ray, out hit))
-                {
-                    if (hit.collider.transform.parent.TryGetComponent(out Block block) && !isFull)
-                    {
-                        if (block.lastSituation == LastCondition.NotTrue)
-                        {
-                            isFull = true;
-                            block.blockSituation = BlockSituation.Dragable;
-                        }
-                    }
-                }
-            }
+            if (!Physics.Raycast(ray, out RaycastHit hit) ||
+                !hit.collider.transform.parent.TryGetComponent(out Block block) || isFull ||
+                block.lastSituation != LastCondition.NotTrue) return;
+            isFull = true;
+            block.blockSituation = BlockSituation.Dragable;
         }
 
     }

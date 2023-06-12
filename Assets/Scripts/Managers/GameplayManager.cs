@@ -52,14 +52,10 @@ namespace Managers
 
         private IEnumerator MoveDownPlace()
         {
-            foreach (var block in blocks)
+            return blocks.Select(block => block.transform.DOMove(positions[0].position, .1f).OnComplete(() =>
             {
-                block.transform.DOMove(positions[0].position, .1f).OnComplete(() =>
-                {
-                    positions.Remove(positions.First());
-                });
-                yield return new WaitForSeconds(.1f);
-            }
+                positions.Remove(positions.First());
+            })).GetEnumerator();
         }
     
         #endregion
@@ -69,11 +65,7 @@ namespace Managers
         private void ControlFinish(Block block)
         {
             blocksInTruePos.Add(block);
-
-            if (blocksInTruePos.Count == blocks.Length)
-            {
-                Finish();
-            }
+            if (blocksInTruePos.Count == blocks.Length) Finish();
         }
     
         private void Finish()
@@ -85,17 +77,7 @@ namespace Managers
         private void GoNextLevel()
         {
             SaveManager.Instance.SaveLevel(level + 1);
-        
-            if (thisLevelCount > 4)
-            {
-                var randomLevel = Random.Range(1, 5);
-                newLevel = randomLevel;
-            }
-            else
-            {
-                newLevel = thisLevelCount + 1;
-            }
-        
+            newLevel = (thisLevelCount > 4) ? Random.Range(1, 5) : thisLevelCount + 1;
             SceneManager.LoadScene(newLevel);
         }
 
